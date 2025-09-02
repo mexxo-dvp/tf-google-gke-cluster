@@ -2,3 +2,5 @@
 .terraform.lock.hcl
 tfplan.out
 terraform-plan.txt
+*.tfstate
+*.tfstate.backup
