@@ -7,7 +7,7 @@ resource "google_compute_instance" "my_instance" {
   zone         = "europe-west1-b"
   name         = "infracost-demo"
 
-  machine_type = "n1-standard-16" # потім поміняєш на n1-standard-32 для дифа
+  machine_type = "n1-standard-32" # потім поміняєш на n1-standard-32 для дифа
 
   network_interface {
     network = "default"
