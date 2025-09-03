@@ -1,14 +1,17 @@
 # tf-google-gke-cluster/main.tf
 
-# (provider "google" у модулі видаляємо — провайдер прийде з root)
+provider "google" {
+  project = var.GOOGLE_PROJECT
+  region  = var.GOOGLE_REGION   # для провайдера ок; ресурс кластера братиме "location" окремо
+}
 
-# GKE кластер (зональний, якщо в location передати зону)
 resource "google_container_cluster" "this" {
-  name                     = var.GKE_CLUSTER_NAME
-  location                 = var.GOOGLE_REGION
-  remove_default_node_pool = true
+  name     = var.GKE_CLUSTER_NAME
+  location = var.GOOGLE_LOCATION         # <- УВАГА: це може бути РЕГІОН або ЗОНА
+  deletion_protection = false            # <- ключ: записати у state
+
   initial_node_count       = 1
-  deletion_protection      = false
+  remove_default_node_pool = true
 
   workload_identity_config {
     workload_pool = "${var.GOOGLE_PROJECT}.svc.id.goog"
@@ -19,7 +22,6 @@ resource "google_container_cluster" "this" {
   }
 }
 
-# Кастомний node pool
 resource "google_container_node_pool" "this" {
   name       = var.GKE_POOL_NAME
   project    = google_container_cluster.this.project
@@ -32,21 +34,18 @@ resource "google_container_node_pool" "this" {
   }
 }
 
-# Аутентифікація до кластера
 module "gke_auth" {
   depends_on   = [google_container_cluster.this]
   source       = "terraform-google-modules/kubernetes-engine/google//modules/auth"
   version      = ">= 24.0.0"
-
   project_id   = var.GOOGLE_PROJECT
   cluster_name = google_container_cluster.this.name
-  location     = google_container_cluster.this.location
+  location     = var.GOOGLE_LOCATION
 }
 
-# Корисні data-джерела
 data "google_client_config" "current" {}
 
 data "google_container_cluster" "main" {
   name     = google_container_cluster.this.name
-  location = google_container_cluster.this.location
+  location = var.GOOGLE_LOCATION
 }
