@@ -3,14 +3,11 @@ variable "GOOGLE_PROJECT" {
   description = "GCP project ID (e.g., civil-pattern-466501-m8)"
 }
 
-# Використовується провайдером; має бути саме РЕГІОН (e.g., europe-west1)
 variable "GOOGLE_REGION" {
   type        = string
   description = "GCP region to use (e.g., europe-west1)"
 }
 
-# Використовується ресурсом кластера як location:
-# Може бути РЕГІОН (кластер регіональний) або ЗОНА (кластер зональний), напр. europe-west1-b
 variable "GOOGLE_LOCATION" {
   type        = string
   description = "GKE location (region or zone, e.g., europe-west1 or europe-west1-b)"

@@ -2,13 +2,13 @@
 
 provider "google" {
   project = var.GOOGLE_PROJECT
-  region  = var.GOOGLE_REGION   # для провайдера ок; ресурс кластера братиме "location" окремо
+  region  = var.GOOGLE_REGION
 }
 
 resource "google_container_cluster" "this" {
   name     = var.GKE_CLUSTER_NAME
-  location = var.GOOGLE_LOCATION         # <- УВАГА: це може бути РЕГІОН або ЗОНА
-  deletion_protection = false            # <- ключ: записати у state
+  location = var.GOOGLE_LOCATION
+  deletion_protection = false
 
   initial_node_count       = 1
   remove_default_node_pool = true
