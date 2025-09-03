@@ -1,2 +1,2 @@
 GKE_MACHINE_TYPE = "e2-small"
-GKE_NUM_NODES    = 3
+GKE_NUM_NODES    = 1
